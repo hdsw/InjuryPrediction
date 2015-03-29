@@ -1,0 +1,38 @@
+# -*- coding: utf-8 -*-
+"""
+Injury Prediction: Ridge
+@author: mikepl
+"""
+
+
+import numpy as np
+from sklearn import datasets, linear_model
+
+# Load the dataset
+injury = datasets.load_injury()
+injury_X = injury.data[:, np.newaxis]
+injury_X_temp = injury_X[:, :, 2]
+
+# data split
+injury_X_train = injury_X_temp[:-20]
+injury_X_test = injury_X_temp[-20:]
+
+# target split
+injury_y_train = injury.target[:-20]
+injury_y_test = injury.target[-20:]
+
+# Ridge
+
+regr = linear_model.Ridge()
+
+# Train the model
+regr.fit(injury_X_train, injury_y_train)
+
+# Print coefficients
+print('Coefficients: \n', regr.coef_)
+print("Residual sum of squares: %.2f"
+      % np.mean((regr.predict(injury_X_test) - injury_y_test) ** 2))
+print('Variance score: %.2f' % regr.score(injury_X_test, injury_y_test))
+
+
+
